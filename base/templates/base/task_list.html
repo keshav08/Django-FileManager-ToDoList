@@ -1,0 +1,67 @@
+{% extends 'base/main.html' %} {% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<div class="header-bar">
+    <div>
+        <h1>Hello {{request.user|title}}</h1>
+        <h3 style="margin:0">You have <i>{{tasks|length}}</i> file{{ tasks|length|pluralize:"s" }}</h3>
+    </div>
+
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'logout' %}">LogOut <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+    {% else %}
+    <a href="{% url 'login' %}">Login</a> 
+    {% endif %}
+</div>
+
+
+<div id="search-add-wrapper">
+    <form method="GET" style="display: flex;">
+        <input type='text' name='search-area' placeholder="Search your file" value="{{search_input}}">
+        <!-- <input class="button" type="submit" value='Search'> -->
+        <button type="submit" class="btn btn-outline-secondary">Search <i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+    {% if tasks|length > 0 %}
+    <a id="add-link" href="{% url 'task-create' %}"><i class="fa-solid fa-upload"></i></a>
+    {% endif %}
+</div>
+
+<div id="tasklist" class="task-items-wrapper">
+
+    {% if tasks %}
+    <div class="task-wrapper">
+        <!-- <div class="task-title"> -->
+            <table class="table m-0">
+                <thead>
+                    <tr>
+                        <th style="text-align: center">S. No</th>
+                        <th>File Name</th>
+                        <th style="text-align: center">Download</th>
+                        <th style="text-align: center">Delete</th>
+                    </tr>
+                </thead>
+                {% for task in tasks %}
+                <tbody>
+                    <tr>
+                        <td style="text-align: center"> {{ forloop.counter }} </td>
+                        <td> {{ task.title }} </td>
+                        <td style="text-align: center"><a href="{{ task.description.url}}" class="btn btn-outline-primary" target="_blank"><i class="fa-solid fa-download"></i></a></td>
+                        <td style="text-align: center"><a class="btn btn-outline-danger" href="{% url 'task-delete' task.id %}"><i class="fa-solid fa-trash"></i></a></td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        <!-- </div> -->
+    </div>
+
+    {% else %}
+    <div style="text-align: center; padding-bottom: 10px; line-height: 1em;">
+        <h3>No files are uploaded.</h3>
+        <!-- <h3>Upload a <a style="text-decoration: none; color: #e53935;" href="{% url 'task-create' %}">New file</a> ! </h3> -->
+        <h3>Upload a New File!</h3>
+        <br><a href="{% url 'task-create' %}" class="btn btn-outline-success btn-lg active" role="button" aria-pressed="true">Upload <i class="fa-solid fa-upload"></i></a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock content %}

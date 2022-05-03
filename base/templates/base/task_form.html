@@ -1,0 +1,25 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<div class="header-bar">
+    <a href="{% url 'home' %}">&#8592; Back</a>
+</div>
+
+
+<div class="card-body">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="">Title</label>
+        {{form.title}}
+
+        <label for="">Description</label>
+        {{form.description}}
+        <br> <br>
+        <!-- {{form.as_p}}  -->
+        <input class="button" type="submit" value="Upload">
+        <!-- <input class="btn btn-outline-danger" role="button" type="submit" value="Submit"> -->
+    </form>
+</div>
+
+ 
+{% endblock content %}
